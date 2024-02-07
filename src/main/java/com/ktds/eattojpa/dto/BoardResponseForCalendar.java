@@ -1,6 +1,7 @@
 package com.ktds.eattojpa.dto;
 
 import com.ktds.eattojpa.domain.Board;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 
 import java.sql.Timestamp;
@@ -12,7 +13,8 @@ public class BoardResponseForCalendar {
     private final Timestamp start;
     private final Timestamp end;
     private final String textColor;
-    private final Integer status;
+    private final Integer currentMember;
+    private final Integer completed;
 
     public BoardResponseForCalendar(Board board) {
         this.id = board.getId();
@@ -20,8 +22,7 @@ public class BoardResponseForCalendar {
         this.start = board.getMeetDate();
         this.end = board.getMeetDate();
         this.textColor = "red";
-        this.status = "red";
-
-
+        this.currentMember = board.getCurrentMember();
+        this.completed = board.getCompleted();
     }
 }

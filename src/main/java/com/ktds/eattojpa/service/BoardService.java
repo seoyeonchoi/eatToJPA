@@ -23,6 +23,8 @@ public class BoardService {
     // 게시판 글 목록 조회 메서드
     public List<Board> findAll() {
         return boardRepository.findAll();
+    }public List<Board> findAllforCalendar() {
+        return boardRepository.findAll();
     }
 
     // 게시판 글 하나 조회 메서드

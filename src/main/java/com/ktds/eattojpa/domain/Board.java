@@ -38,11 +38,16 @@ public class Board {
     private String restaurantKey;
     @Column(name = "meetName", nullable = false)
     private String meetName;
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @Column(name = "currentMember", nullable = false)
+    private Integer currentMember;
+    @Column(name = "completed", nullable = false)
+    private Integer completed;
+    @Column(name = "meetKey", nullable = false)
+    private String meetKey;
+
 
     @Builder
-    public Board(String id, String title, String content, Timestamp regDate, Timestamp updateDate, Integer minNum, Integer maxNum, Timestamp meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey, Integer status) {
+    public Board(String id, String title, String content, Timestamp regDate, Timestamp updateDate, Integer minNum, Integer maxNum, Timestamp meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey, Integer currentMember, Integer completed) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -56,11 +61,9 @@ public class Board {
         this.restaurantKey = restaurantKey;
         this.meetName = meetName;
         this.meetKey = meetKey;
-        this.status = status;
+        this.currentMember = currentMember;
+        this.completed = completed;
     }
-
-    @Column(name = "meetKey", nullable = false)
-    private String meetKey;
 
     public void update(String title, String content, Integer minNum, Integer maxNum, Timestamp meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey) {
         this.title = title;

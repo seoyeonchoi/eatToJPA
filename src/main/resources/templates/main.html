@@ -51,14 +51,14 @@
             <div id="calendar"></div>
             <!-- meetDate 변수를 JavaScript로 전달 -->
             <script th:inline="javascript">
-                const meetDate = "${meedDate}";
-                let boards = "${boards}";
+                const meetDate = "${#dates.format(article.regDate, 'yyyy-MM-dd')}";
+                let boards = "${boardsforCalendar}";
             </script>
         </div> 
         <div class="container-fluid col-lg-6 col-md-auto boardSection">
             <div class="container">
                 <div id="boardTop">
-                    <div class="h2">n월 n일의 메뉴</div>
+                    <div class="h2">"${#dates.format(article.regDate, 'MM')}"월 "${#dates.format(article.regDate, 'dd')}"일의 메뉴</div>
                     <button type="button" class="btn" data-bs-toggle="tooltip" 
                         data-bs-placement="left" data-bs-title="뭐 먹을지 고민될 때 GPT에게 물어보기!">
                         메뉴상담

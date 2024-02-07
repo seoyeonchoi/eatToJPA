@@ -2,6 +2,7 @@ package com.ktds.eattojpa.controller;
 
 import com.ktds.eattojpa.domain.Board;
 import com.ktds.eattojpa.dto.BoardListViewResponse;
+import com.ktds.eattojpa.dto.BoardResponseForCalendar;
 import com.ktds.eattojpa.dto.BoardViewResponse;
 import com.ktds.eattojpa.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +40,10 @@ public class BoardViewController {
 
         model.addAttribute("meetDate", meetDate);
         // 저장된 모든 리스트 저장
-        List<BoardListViewResponse> boards = boardService.findAll().stream()
-                .map(BoardListViewResponse::new)
+        List<BoardResponseForCalendar> boards = boardService.findAllforCalendar().stream()
+                .map(BoardResponseForCalendar::new)
                 .toList();
-        model.addAttribute("boards", boards); // 블로그 글 리스트 저장
+        model.addAttribute("boardsforCalendar", boards); // 블로그 글 리스트 저장
 
         return "main";
     }
