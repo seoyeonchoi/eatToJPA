@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -12,11 +14,11 @@ public class BoardViewResponse {
     private String id;
     private String title;
     private String content;
-    private Timestamp regDate;
-    private Timestamp updateDate;
+    private LocalDateTime regDate;
+    private LocalDateTime updateDate;
     private Integer minNum;
     private Integer maxNum;
-    private Timestamp meetDate;
+    private LocalDate meetDate;
     private String memberId;
     private String restaurantName;
     private String restaurantKey;

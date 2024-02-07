@@ -6,7 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -21,15 +23,15 @@ public class Board {
     @Column(name = "content", nullable = false)
     private String content;
     @Column(name = "regDate")
-    private Timestamp regDate;
+    private LocalDateTime regDate;
     @Column(name = "updateDate")
-    private Timestamp updateDate;
+    private LocalDateTime updateDate;
     @Column(name = "minNum", nullable = false)
     private Integer minNum;
     @Column(name = "maxNum", nullable = false)
     private Integer maxNum;
     @Column(name = "meetDate", nullable = false)
-    private Timestamp meetDate;
+    private LocalDate meetDate;
     @Column(name = "memberId", nullable = false)
     private String memberId;
     @Column(name = "resName", nullable = false)
@@ -47,7 +49,7 @@ public class Board {
 
 
     @Builder
-    public Board(String id, String title, String content, Timestamp regDate, Timestamp updateDate, Integer minNum, Integer maxNum, Timestamp meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey, Integer currentMember, Integer completed) {
+    public Board(String id, String title, String content, LocalDateTime regDate, LocalDateTime updateDate, Integer minNum, Integer maxNum, LocalDate meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey, Integer currentMember, Integer completed) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -65,10 +67,11 @@ public class Board {
         this.completed = completed;
     }
 
-    public void update(String title, String content, Integer minNum, Integer maxNum, Timestamp meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey) {
+    public void update(String title, String content, Integer minNum, Integer maxNum, LocalDate meetDate, String memberId, String restaurantName, String restaurantKey, String meetName, String meetKey) {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         this.title = title;
         this.content = content;
-        this.updateDate = new Timestamp(System.currentTimeMillis());
+        this.updateDate = now;
         this.minNum = minNum;
         this.maxNum = maxNum;
         this.meetDate = meetDate;

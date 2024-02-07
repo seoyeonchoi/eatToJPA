@@ -5,13 +5,15 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class BoardResponseForCalendar {
     private final String id;
     private final String title;
-    private final Timestamp start;
-    private final Timestamp end;
+    private final LocalDate start;
+    private final LocalDate end;
     private final String textColor;
     private final Integer currentMember;
     private final Integer completed;

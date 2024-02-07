@@ -24,8 +24,19 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+  devtools:
+    livereload:
+      enabled: true
 
 
 logging:
   level:
     org.hibernate.SQL: debug
+
+thymeleaf:
+  prefix=classpath: /templates/
+  suffix: .html
+  check-template-location: true
+  cache: false
+  mvc:
+    static-path-pattern: "/static/**"

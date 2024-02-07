@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -17,22 +20,21 @@ public class BoardRequest {
     private String content;
     private Integer minNum;
     private Integer maxNum;
-    private Timestamp meetDate;
+    private LocalDate meetDate;
     private String memberId;
     private String restaurantName;
     private String restaurantKey;
     private String meetName;
     private String meetKey;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
     public Board toEntity() {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         return Board.builder()
                 .id(UUID.randomUUID().toString())
                 .title(title)
                 .content(content)
-                .regDate(new Timestamp(System.currentTimeMillis()))
-                .updateDate(new Timestamp(System.currentTimeMillis()))
+                .regDate(now)
+                .updateDate(now)
                 .minNum(minNum)
                 .maxNum(maxNum)
                 .meetDate(meetDate)

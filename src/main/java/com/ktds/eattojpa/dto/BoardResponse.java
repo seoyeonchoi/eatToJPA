@@ -4,18 +4,19 @@ import com.ktds.eattojpa.domain.Board;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class BoardResponse {
     private final String id;
     private final String title;
     private final String content;
-    private final Timestamp regDate;
-    private final Timestamp updateDate;
+    private final LocalDateTime regDate;
+    private final LocalDateTime updateDate;
     private final Integer minNum;
     private final Integer maxNum;
-    private final Timestamp meetDate;
+    private final LocalDate meetDate;
     private final String memberId;
     private final String restaurantName;
     private final String restaurantKey;
