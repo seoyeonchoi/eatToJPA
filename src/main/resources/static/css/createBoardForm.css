@@ -1,0 +1,109 @@
+@font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+    font-family: "BMJUA" !important;
+    background: rgba(85, 221, 169, 0.5) !important;
+}
+
+.row{
+    margin-bottom: 5vh;
+}
+
+#menuPageTitle{
+    width: 50vw;
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 70px;
+    line-height: 88px;
+    text-align: center;
+    color: #000000;
+    margin-top: 6vh;
+    margin-bottom: 6vh;
+}
+
+#menuDiv{
+    width: 65vw;
+    background: #FFFFFF;
+    box-shadow: 0px 100px 100px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap; 
+    padding: 3vw 5vw;
+}
+
+#contentBox{
+    width: 80%;
+    height: 25vh;
+    border-left-width:2px;
+    border-right-width:2px;
+    border-top-width:2px;
+    border-bottom-width: 2px;
+    margin-bottom: 5vh;
+
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+#placeSearchInput{
+    width: 80%;
+    height: 6vh;
+    border-left-width:0;
+    border-right-width:0;
+    border-top-width:0;
+    border-bottom-width: 2px;
+    border-radius: 0%;
+    border-color: #000000;
+    margin-bottom: 8vh !important;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+input{
+    width: 80%;
+    height: 6vh;
+    border-left-width:0;
+    border-right-width:0;
+    border-top-width:0;
+    border-bottom-width: 2px;
+    margin-bottom: 8vh !important;
+    font-weight: 400;
+    font-size: 20px !important;
+}
+
+#placeSearch{
+    border-color: #000000;
+    border-width: 2px;
+    margin-bottom: 8vh !important;
+}
+
+#placeSearchGroup{
+    width: 80%;
+}
+
+p{
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 30px;
+    color: #000000;
+    margin-bottom: 1vh !important;
+}
+
+#save{
+    width: 10vw;
+    height: 10vh;
+    align-self: center;    
+    background:  rgba(85, 221, 169, 0.5);
+    border-radius: 50px;
+    font-weight: 300;
+    font-size: 23px;
+}

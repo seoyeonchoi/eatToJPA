@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EatTo</title>
+  <link rel="stylesheet" href="../static/css/index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col" id="SignIndiv">
+          <div class="h1" id="signIn">Sign In</div>
+          <form class="mt-4">
+            <div class="mb-3">
+              <input type="email" class="form-control rounded-5" id="email" placeholder="이메일" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+              <input type="password" class="form-control rounded-5" id="password" placeholder="비밀번호">
+            </div>
+            <button type="submit" class="btn my-3" id="signInbtn">로그인</button>
+            <div id="hrOr">
+              <hr id="hrid">
+              <p id="text">or</p>
+              <hr id="hrid">
+            </div>
+          </form>
+          <button type="submit" class="btn my-3" id="signInbtn">소셜로그인</button>
+      </div>
+      <div class="col" id="SignUpdiv">
+        <div class="h1 text-center my-5" id="title">오늘 내 밥친구 찾기</div>
+        <img src="../static/image/logo.png" class="img-fluid justify-content-center mb-5" id="logo" alt="">
+        <button id="signUpbtn" class="btn mt-3">회원가입</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

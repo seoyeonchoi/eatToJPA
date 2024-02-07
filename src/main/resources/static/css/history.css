@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+#joinType{
+    width: 20vh !important;
+
+    background: rgba(85, 221, 169, 0.5);
+    border-radius: 50px;
+
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 200;
+    font-size: 40px;
+    color: #000000;
+    }
+
+.col{
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 200;
+    font-size: 25px;
+}
+
+table{
+    margin-top: 3vh;
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 200;
+    font-size: 20px;
+}

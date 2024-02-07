@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#header{
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 25px;
+    display: flex;
+    background-color: #ffffff !important;
+}
+
+#logo{
+    margin: 10px 30px;
+}
+
+#nav-header{
+    position: absolute;
+    right: 3vw;
+}
+
+.nav-item{
+    margin-right: 10px;
+}
+
+#statusActive{
+    color: #55DDA9;
+}
