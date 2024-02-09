@@ -23,7 +23,7 @@ public class BoardResponseForCalendar {
         this.title = board.getTitle();
         this.start = board.getMeetDate();
         this.end = board.getMeetDate();
-        this.textColor = "red";
+        this.textColor = "white";
         this.currentMember = board.getCurrentMember();
         this.completed = board.getCompleted();
     }

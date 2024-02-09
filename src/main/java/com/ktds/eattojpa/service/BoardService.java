@@ -2,12 +2,15 @@ package com.ktds.eattojpa.service;
 
 import com.ktds.eattojpa.domain.Board;
 import com.ktds.eattojpa.dto.BoardRequest;
+import com.ktds.eattojpa.dto.BoardResponse;
 import com.ktds.eattojpa.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,7 +26,9 @@ public class BoardService {
     // 게시판 글 목록 조회 메서드
     public List<Board> findAll() {
         return boardRepository.findAll();
-    }public List<Board> findAllforCalendar() {
+    }
+
+    public List<Board> findAllforCalendar() {
         return boardRepository.findAll();
     }
 
@@ -48,5 +53,9 @@ public class BoardService {
                 request.getRestaurantName(), request.getRestaurantKey(), request.getMeetName(), request.getMeetKey());
 
         return board;
+    }
+
+    public List<Board> findByDate(LocalDate meetDate) {
+        return boardRepository.findByMeetDate(meetDate);
     }
 }

@@ -22,6 +22,8 @@ public class BoardResponse {
     private final String restaurantKey;
     private final String meetName;
     private final String meetKey;
+    private final Integer completed;
+    private final Integer currentMember;
 
     public BoardResponse(Board board) {
         this.title = board.getTitle();
@@ -37,7 +39,8 @@ public class BoardResponse {
         this.restaurantKey = board.getRestaurantKey();
         this.meetName = board.getMeetName();
         this.meetKey = board.getMeetKey();
-
+        this.completed = board.getCompleted();
+        this.currentMember = board.getCurrentMember();
     }
 
 }

@@ -2,6 +2,7 @@ package com.ktds.eattojpa.controller;
 
 import com.ktds.eattojpa.domain.Board;
 import com.ktds.eattojpa.dto.BoardListViewResponse;
+import com.ktds.eattojpa.dto.BoardResponse;
 import com.ktds.eattojpa.dto.BoardResponseForCalendar;
 import com.ktds.eattojpa.dto.BoardViewResponse;
 import com.ktds.eattojpa.service.BoardService;
@@ -49,7 +50,7 @@ public class BoardViewController {
     }
 
     // 1. main 조회
-    @GetMapping("/main/{meetDate}")
+    @GetMapping({"/main/{meetDate}", "/main"})
     public String getMain(@PathVariable(required = false) String meetDate, Model model) {
         LocalDate parsedDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
         if (meetDate != null) {
@@ -60,10 +61,17 @@ public class BoardViewController {
         List<BoardResponseForCalendar> boards = boardService.findAllforCalendar().stream()
                 .map(BoardResponseForCalendar::new)
                 .toList();
+        // meetDate에 저장된 메뉴들 목록 저장
+        List<BoardResponse> boardsByMeetDate = boardService.findByDate(parsedDate).stream()
+                .map(BoardResponse::new)
+                .toList();;
         model.addAttribute("boardsforCalendar", boards); // 블로그 글 리스트 저장
-
+        model.addAttribute("boardsByMeetDate", boardsByMeetDate); // meetDate 표시 리스트 저장
+        System.out.println(model);
         return "main";
     }
+
+    // main에서 달력의 날짜 클릭 시 해당 날짜의 메뉴가 보이도록 업데이트 value를 조회
 
 
     // 새 메뉴 등록

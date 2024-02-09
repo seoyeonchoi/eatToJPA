@@ -3,6 +3,7 @@ package com.ktds.eattojpa.controller;
 import com.ktds.eattojpa.domain.Board;
 import com.ktds.eattojpa.dto.BoardRequest;
 import com.ktds.eattojpa.dto.BoardResponse;
+import com.ktds.eattojpa.dto.BoardResponseForCalendar;
 import com.ktds.eattojpa.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -37,7 +39,16 @@ public class BoardAPIController {
                 .body(boards);
     }
 
-    @GetMapping("/api/boards/{id}")
+    @GetMapping("/api/boards-CalendarForm")
+    public ResponseEntity<List<BoardResponseForCalendar>> findAllBoardsCalendarForm() {
+        List<BoardResponseForCalendar> boards = boardService.findAllforCalendar().stream()
+                .map(BoardResponseForCalendar::new)
+                .toList();
+        return ResponseEntity.ok()
+                .body(boards);
+    }
+
+    @GetMapping("/api/board/{id}")
     //URL 경로에서 값 추출
     public ResponseEntity<BoardResponse> findBoard(@PathVariable String id) {
         Board board = boardService.findById(id);
@@ -58,4 +69,17 @@ public class BoardAPIController {
         return ResponseEntity.ok()
                 .body(updatedBoard);
     }
+
+    @GetMapping("/api/boards/{meetDate}")
+    //URL 경로에서 값 추출
+    public ResponseEntity<List<BoardResponse>> findBoardsbyMeetDate(@PathVariable LocalDate meetDate) {
+        List<BoardResponse> boards = boardService.findByDate(meetDate)
+                .stream()
+                .map(BoardResponse::new)
+                .toList();
+
+        return ResponseEntity.ok()
+                .body(boards);
+    }
+
 }

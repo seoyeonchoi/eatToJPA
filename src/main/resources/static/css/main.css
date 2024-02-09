@@ -44,6 +44,7 @@
 
 a{
     color: black !important;
+    text-decoration: none !important;
 }
 
 th{
@@ -61,4 +62,25 @@ th{
 #boardTop{
     display: flex;
     justify-content: space-between;
+}
+
+#boardDetailModalStatus{
+    border-radius: 50px;
+    width: 100px;
+    text-align: center;
+}
+
+.modal{
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 25px;
+}
+
+.modal-dialog {
+    max-width: 80%;
+}
+
+.border-bottom {
+    border-bottom-width: 2px;
 }
