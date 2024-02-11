@@ -49,7 +49,7 @@ input{
     margin-bottom: 8vh !important;
 }
 
-#inputEmail{
+.inputEmail{
     width: 27vw;
     border-left-width:0;
     border-right-width:0;
@@ -58,7 +58,7 @@ input{
     margin-bottom: 0vh !important;
 }
 
-#box{
+.box{
     display: flex;
     justify-content: space-between;
     border-bottom: solid 2px rgb(118, 118, 118);

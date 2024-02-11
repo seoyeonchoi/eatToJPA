@@ -42,7 +42,7 @@ body{
   height: 117px;
 }
 
-#signUpbtn{
+button.signUpbtn{
   /* position: absolute; */
   width: 280px;
   height: 60px;
@@ -163,7 +163,7 @@ border-radius: 50px; */
   margin-left: 30px;
   }
 
-#hrid{
+.hrid{
   flex: auto;
   border: none;
   height: 1px;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EatTo</title>
+    <title>EatTo:main</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
-            <img th:src="@{/image/logo.png}" th:href="@{/main}" id="logo" alt="" width="250px">
+            <img th:src="@{images/logo.png}" th:href="@{/main}" id="logo" alt="" width="250px">
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,9 +36,12 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/new-menu}">메뉴 등록</a>
-                </li>  
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#"><img th:src="@{/image/bell-fill.svg}" alt="" width="25px"></a>
+                    <button type="button" class="btn btn-secondary nav-link active" onclick="location.href='/logout'">로그아웃</button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><img th:src="@{images/bell-fill.svg}" alt="" width="25px"></a>
                 </li>
             </ul>
           </div>
@@ -88,7 +91,7 @@
                 </table>
                 <div id="btndiv">
                     <button class="btn">
-                        <img th:src="@{/image/plus-circle.svg}" alt="" width="45vw" >
+                        <img th:src="@{images/plus-circle.svg}" alt="" width="45vw" >
                     </button>
                 </div>
             </div>

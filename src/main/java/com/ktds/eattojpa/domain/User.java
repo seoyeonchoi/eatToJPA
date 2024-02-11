@@ -39,12 +39,12 @@ public class User implements UserDetails {
     private LocalDate createDate;
 
     @Builder
-    public User(String email, String password, String name, LocalDate createDate) {
+    public User(String email, String password, String name) {
         this.id = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
         this.name = name;
-        this.createDate = createDate;
+        this.createDate = LocalDate.now();
     }
 
     @Override // 권한 반환
