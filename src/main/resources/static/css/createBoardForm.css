@@ -52,7 +52,7 @@ body{
     font-size: 20px;
 }
 
-#placeSearchInput{
+.placeSearchInput{
     width: 80%;
     height: 6vh;
     border-left-width:0;
@@ -78,13 +78,13 @@ input{
     font-size: 20px !important;
 }
 
-#placeSearch{
+.placeSearch{
     border-color: #000000;
     border-width: 2px;
     margin-bottom: 8vh !important;
 }
 
-#placeSearchGroup{
+.placeSearchGroup{
     width: 80%;
 }
 

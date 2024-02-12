@@ -1,47 +1,50 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EatTo</title>
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/createBoardForm.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <script src="../static/js/fullcalendar/dist/index.global.js"></script>
-    <script src="../static/js/main.js"></script>
+    <title>EatTo:new-menu</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/createBoardForm.css}">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js}" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 </head>
 <body>
-    <!-- 네비게이션 헤더 -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <img src="../static/images/logo.png" id="logo" alt="" width="250px">
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<!-- 네비게이션 헤더 -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{images/logo.png}" th:href="@{/main}" id="logo" alt="" width="250px">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse header-nav" id="navbarSupportedContent">
+        </button>
+        <div class="collapse navbar-collapse header-nav" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="nav-header">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page">김유저님, 안녕하세요!</a>
+                    <a class="nav-link active" aria-current="page" th:text="${userName} + '님, 안녕하세요!'"></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">마이페이지</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/mypage}">마이페이지</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">나의 이용현황</a>
+                    <a class="nav-link active" th:href="@{/history}">나의 이용현황</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" id="statusActive">메뉴 등록</a>
+                    <a class="nav-link active" th:href="@{/new-menu}" id="statusActive">메뉴 등록</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#"><img src="../static/images/bell-fill.svg" alt="" width="25px"></a>
+                    <button type="button" class="btn nav-link active" onclick="location.href='/logout'">로그아웃</button>
                 </li>
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link active" href="#"><img th:src="@{images/bell-fill.svg}" alt="" width="25px"></a>-->
+                <!--                </li>-->
             </ul>
-          </div>
         </div>
-      </nav> 
+    </div>
+</nav>
+
     <!-- 본문 -->
     <div class="container-fluid align-content-center">
         <div class="container h1" id="menuPageTitle">새 메뉴 등록🍽️</div>
@@ -67,9 +70,9 @@
                     <p>식당: </p>
                 </div>
                 <div class="col">
-                    <div class="input-group mb-3" id="placeSearchGroup">
-                        <input type="text" class="form-control" placeholder="장소 검색" id="placeSearchInput">
-                        <button class="btn btn-outline-secondary" type="button" id="placeSearch">🔍</button>
+                    <div class="input-group mb-3 placeSearchGroup">
+                        <input type="text" class="form-control placeSearchInput" placeholder="장소 검색">
+                        <button class="btn btn-outline-secondary placeSearch" type="button">🔍</button>
                     </div>
                 </div>
             </div>
@@ -78,9 +81,9 @@
                     <p>모일 장소: </p>
                 </div>
                 <div class="col">
-                    <div class="input-group mb-3" id="placeSearchGroup">
-                        <input type="text" class="form-control" placeholder="장소 검색" id="placeSearchInput">
-                        <button class="btn btn-outline-secondary" type="button" id="placeSearch">🔍</button>
+                    <div class="input-group mb-3 placeSearchGroup">
+                        <input type="text" class="form-control placeSearchInput" placeholder="장소 검색">
+                        <button class="btn btn-outline-secondary placeSearch" type="button">🔍</button>
                     </div>
                 </div>
             </div>

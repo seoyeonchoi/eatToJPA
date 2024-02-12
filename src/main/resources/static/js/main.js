@@ -6,6 +6,8 @@
 //     calendar.render();
 //   });
 
+var date = new Date();
+
 document.addEventListener('DOMContentLoaded', async function() {
     let response = await fetch('/api/boards-CalendarForm');
     let boardsforCalendar = await response.json();
@@ -21,9 +23,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             alert('Event: ' + info.event.title);
         },
         dateClick: function(info) {
-            var date = new Date(info.dateStr); // info.dateStr을 JavaScript Date 객체로 변환
+            date = new Date(info.dateStr); // info.dateStr을 JavaScript Date 객체로 변환
             var month = date.getMonth() + 1; // 월 (0부터 시작하므로 1을 더해줌)
             var day = date.getDate(); // 일
+            var year = date.getFullYear();
 
             // HTML 업데이트
             var formattedDate = month + '월 ' + day + '일의 메뉴';
@@ -105,4 +108,20 @@ $(document).ready(function() {
             }
         });
     });
+});
+
+// 클릭 이벤트 핸들러
+document.getElementById('new-board-form').addEventListener('click', function() {
+    // meetDate 값을 이용하여 Date 객체 초기화
+    if (date == undefined) {
+        date = new Date(meetDate);
+    }
+    var month = date.getMonth() + 1; // 월 (0부터 시작하므로 1을 더해줌)
+    var day = date.getDate(); // 일
+
+    // meetDate를 형식에 맞게 조합
+    var meetDate = date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+
+    // meetDate를 포함한 URL로 이동
+    window.location.href = '/new-board/' + meetDate;
 });
