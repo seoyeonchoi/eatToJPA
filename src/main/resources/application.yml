@@ -12,6 +12,13 @@ spring:
     url: jdbc:mysql://localhost:3306/eatto?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: 1234
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 795609194674-lgspjav06e7d4bteo4va5vkqjordvobc.apps.googleusercontent.com
+            client-secret: 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
 
 
   jpa:
@@ -40,3 +47,7 @@ thymeleaf:
   cache: false
   mvc:
     static-path-pattern: "/static/**"
+
+jwt:
+  issuer: ajufresh@gmail.com
+  secret_key: study-springboot

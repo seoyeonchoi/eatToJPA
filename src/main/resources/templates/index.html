@@ -7,6 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/index.css}">
   <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js}" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script th:src="@{/js/token.js}" defer></script>
 </head>
 <body>
   <div class="container-fluid">
@@ -28,7 +29,9 @@
               <hr class="hrid">
             </div>
           </form>
-          <button type="submit" class="btn my-3" id="signInbtn">소셜로그인</button>
+          <a th:href="@{/oauth2/authorization/google}">
+            <img th:src="@{images/google.png}" class="img-fluid justify-content-center mb-5" alt="">
+          </a>
       </div>
       <div class="col" id="SignUpdiv">
         <div class="h1 text-center my-5" id="title">오늘 내 밥친구 찾기</div>

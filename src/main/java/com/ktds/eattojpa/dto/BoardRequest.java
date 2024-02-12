@@ -21,13 +21,12 @@ public class BoardRequest {
     private Integer minNum;
     private Integer maxNum;
     private LocalDate meetDate;
-    private String memberId;
     private String restaurantName;
     private String restaurantKey;
     private String meetName;
     private String meetKey;
 
-    public Board toEntity() {
+    public Board toEntity(String memberId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         return Board.builder()
                 .id(UUID.randomUUID().toString())

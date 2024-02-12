@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,9 +22,9 @@ public class BoardAPIController {
     private final BoardService boardService;
 
     @PostMapping("/api/boards")
-    public ResponseEntity<Board> addBoard(@RequestBody BoardRequest request) {
+    public ResponseEntity<Board> addBoard(@RequestBody BoardRequest request, Principal principal) {
         log.info(request.toString());
-        Board savedBoard = boardService.save(request);
+        Board savedBoard = boardService.save(request, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedBoard);
     }

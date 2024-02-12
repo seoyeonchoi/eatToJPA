@@ -19,8 +19,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     // 게사판 글 추가 메서드
-    public Board save(BoardRequest request) {
-        return boardRepository.save(request.toEntity());
+    public Board save(BoardRequest request, String memberId) {
+        return boardRepository.save(request.toEntity(memberId));
     }
 
     // 게시판 글 목록 조회 메서드
@@ -49,7 +49,7 @@ public class BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
 
-        board.update(request.getTitle(), request.getContent(), request.getMinNum(), request.getMaxNum(), request.getMeetDate(), request.getMemberId(),
+        board.update(request.getTitle(), request.getContent(), request.getMinNum(), request.getMaxNum(), request.getMeetDate(),
                 request.getRestaurantName(), request.getRestaurantKey(), request.getMeetName(), request.getMeetKey());
 
         return board;

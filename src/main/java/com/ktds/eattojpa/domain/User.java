@@ -35,6 +35,7 @@ public class User implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
+
     @Column(name = "createDate")
     private LocalDate createDate;
 
@@ -45,6 +46,12 @@ public class User implements UserDetails {
         this.password = password;
         this.name = name;
         this.createDate = LocalDate.now();
+    }
+
+    // 사용자 닉네임 변경
+    public User update(String nickname) {
+        this.name = nickname;
+        return this;
     }
 
     @Override // 권한 반환
