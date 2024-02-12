@@ -37,6 +37,7 @@ public class TokenProvider {
                 .setIssuedAt(now)  // 내용 iat : 현재 시간
                 .setExpiration(expiry) // 내용 exp : expiry 멤버 변숫값
                 .setSubject(user.getEmail()) // 클레임 id : 유저 ID
+                .claim("id", user.getId())
                 // 서명 : 비밀값과 함께 해시값을 HS256 방식으로 암호화
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
@@ -59,16 +60,15 @@ public class TokenProvider {
     public Authentication getAuthentication(String token){
         Claims claims = getClaims(token);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
-
         return new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities),
                 token, authorities);
     }
 
     // 4. token 기반으로 유저 ID를 가져오는 메서드
-    public Long getUserId(String token) {
+    public String getUserId(String token) {
         Claims claims = getClaims(token);
-        return claims.get("id", Long.class);
+        return claims.get("id", String.class);
     }
 
     private Claims getClaims(String token) {

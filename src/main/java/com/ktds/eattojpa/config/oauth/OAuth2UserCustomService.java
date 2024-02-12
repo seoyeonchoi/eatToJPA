@@ -18,9 +18,15 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        // registrationId로 어떤 oauth로 로그인 했는지 알 수 있음
+        System.out.println("getClientRegistration : " + userRequest.getClientRegistration());
+        System.out.println("getAccessToken = " + userRequest.getAccessToken().getTokenValue());
+
         // 요청을 바탕으로 유저 정보를 담은 객체 반환
         OAuth2User user = super.loadUser(userRequest);
+        System.out.println("getAttributes = " + super.loadUser(userRequest).getAttributes());
         saveOrUpdate(user);
+        System.out.println("loadUser 실행 중");
         return user;
     }
 
@@ -29,9 +35,11 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
+        String providerId = oAuth2User.getAttribute("sub");
         User user = userRepository.findByEmail(email)
                 .map(entity -> entity.update(name))
                 .orElse(User.builder()
+                        .name(providerId)
                         .email(email)
                         .name(name)
                         .build());

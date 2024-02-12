@@ -8,12 +8,14 @@ import com.ktds.eattojpa.dto.BoardViewResponse;
 import com.ktds.eattojpa.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,7 +53,9 @@ public class BoardViewController {
 
     // 1. main 조회
     @GetMapping({"/main/{meetDate}", "/main"})
-    public String getMain(@PathVariable(required = false) String meetDate, Model model) {
+    public String getMain(@PathVariable(required = false) String meetDate, Principal principal, Model model) {
+        System.out.println("현재 로그인 상황: " + SecurityContextHolder.getContext().getAuthentication().toString());
+//        System.out.println("principal: " + principal.getName());
         LocalDate parsedDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
         if (meetDate != null) {
             parsedDate = LocalDate.parse(meetDate, DateTimeFormatter.ISO_DATE);
