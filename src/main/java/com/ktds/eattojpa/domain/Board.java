@@ -34,8 +34,6 @@ public class Board {
     private LocalDate meetDate;
     @Column(name = "memberId", nullable = false)
     private String memberId;
-    @Column(name = "writer", nullable = false)
-    private String writer;
     @Column(name = "resName", nullable = false)
     private String restaurantName;
     @Column(name = "resKey", nullable = false)
@@ -67,7 +65,6 @@ public class Board {
         this.meetKey = meetKey;
         this.currentMember = currentMember;
         this.completed = completed;
-        this.writer = writer;
     }
 
     public void update(String title, String content, Integer minNum, Integer maxNum, LocalDate meetDate, String restaurantName, String restaurantKey, String meetName, String meetKey) {

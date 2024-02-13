@@ -42,6 +42,8 @@ public class BoardRequest {
                 .restaurantKey(restaurantKey)
                 .meetName(meetName)
                 .meetKey(meetKey)
+                .completed(0)
+                .currentMember(0)
                 .build();
     }
 }

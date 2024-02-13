@@ -27,8 +27,15 @@ public class BoardAPIController {
 
     @PostMapping("/api/boards")
     public ResponseEntity<Board> addBoard(@RequestBody BoardRequest request, Authentication auth) {
+        // 로그인 정보 확인
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
+        User loginUser = userService.findByEmail(auth.getName());
+        String loginId = loginUser.getId();
         log.info(request.toString());
-        Board savedBoard = boardService.save(request, auth.getName());
+        Board savedBoard = boardService.save(request, loginId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedBoard);
     }

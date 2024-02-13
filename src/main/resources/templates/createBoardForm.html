@@ -72,7 +72,7 @@
                 </div>
                 <div class="col">
                     <div class="input-group mb-3 placeSearchGroup">
-                        <input type="text" class="form-control placeSearchInput" placeholder="장소 검색">
+                        <input type="text" id="resName" class="form-control placeSearchInput" placeholder="장소 검색">
                         <button class="btn btn-outline-secondary placeSearch" type="button">🔍</button>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col">
                     <div class="input-group mb-3 placeSearchGroup">
-                        <input type="text" class="form-control placeSearchInput" placeholder="장소 검색">
+                        <input type="text" id="meetName" class="form-control placeSearchInput" placeholder="장소 검색">
                         <button class="btn btn-outline-secondary placeSearch" type="button">🔍</button>
                     </div>
                 </div>
@@ -93,14 +93,14 @@
                     <p>최소 인원: </p>
                 </div>
                 <div class="col-3">
-                    <input type="number">
+                    <input type="number" id="minNum">
                 </div>
                 <div class="col-1"></div>
                 <div class="col-2">
                     <p>최대 인원: </p>
                 </div>
                 <div class="col-3">
-                    <input type="number">
+                    <input type="number" id="maxNum">
                 </div>
             </div>
 
@@ -108,6 +108,79 @@
             <button type="submit" class="btn" id="save">게시글 등록</button>
         </form>
     </div>
-
 </body>
+<script>
+    let currentURL = window.location.href;
+    // URL을 '/'로 분할하여 배열로 만든 후, 마지막 요소를 추출하여 meetDate 변수에 저장
+    let urlParts = currentURL.split('/');
+    let meetDate = urlParts[urlParts.length - 1];
+    console.log('meetDate이다: ', meetDate);
+
+
+    window.onload = function() {
+        const saveButton = document.getElementById("save");
+        // 저장 버튼 비활성화
+        saveButton.disabled = true;
+    };
+
+    function validSave() {
+        const saveButton = document.getElementById("save");
+        let title = document.getElementById("titleInput").value;
+        let content = document.getElementById("contentBox").value;
+        let minNum = document.getElementById("minNum").value;
+        let maxNum = document.getElementById("maxNum").value;
+        let resaurantName = document.getElementById("resName").value;
+        let meetName = document.getElementById("meetName").value;
+
+        if (title.trim() !== "" && content.trim() !== "" && minNum.trim() !== "" && maxNum.trim() !== "" && resaurantName.trim() !== "" && meetName.trim() !== "") {
+            saveButton.disabled = false; // 저장 버튼 활성화
+        } else {
+            saveButton.disabled = true; // 저장 버튼 비활성화
+        }
+    }
+
+    document.getElementById("titleInput").onkeyup = validSave;
+    document.getElementById("contentBox").onkeyup = validSave;
+    document.getElementById("minNum").onkeyup = validSave;
+    document.getElementById("maxNum").onkeyup = validSave;
+    document.getElementById("resName").onkeyup = validSave;
+    document.getElementById("meetName").onkeyup = validSave;
+
+    const saveButton = document.getElementById("save");
+    if (saveButton) {
+        saveButton.addEventListener('click', event => {
+            fetch(`api/boards`, {
+                method: 'POST',
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    title : document.getElementById("titleInput").value,
+                    content : document.getElementById("contentBox").value,
+                    minNum : document.getElementById("minNum").value,
+                    maxNum : document.getElementById("maxNum").value,
+                    meetDate : meetDate,
+                    resaurantName : document.getElementById("resName").value,
+                    resaurantKey : 'sample reskey',
+                    meetName : document.getElementById("meetName").value,
+                    meetKey : 'sample meetkdy'
+                })
+            }).then(response => {
+                console.log('response이다: ' , response);
+                if (!response.ok) {
+                    throw new Error("글 등록에 실패했습니다.");
+                }
+                return response.text();
+            }).then(message => {
+                alert("메뉴 등록 성공!");
+                location.replace(`/main/${meetDate}`);
+            }).catch(error => {
+                alert("글 등록에 실패했습니다.");
+            });
+        });
+    }
+
+
+</script>
+
 </html>
