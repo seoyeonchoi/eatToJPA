@@ -49,7 +49,7 @@
     <!-- 본문 -->
     <div class="container-fluid align-content-center">
         <div class="container h1" id="menuPageTitle">새 메뉴 등록🍽️</div>
-        <form class="container align-content-center justify-content-center" id="menuDiv">
+        <div class="container align-content-center justify-content-center" id="menuDiv">
             <div class="row mt-3 ms-5">
                 <div class="col-2">
                     <p>제목: </p>
@@ -106,7 +106,7 @@
 
 
             <button type="submit" class="btn" id="save">게시글 등록</button>
-        </form>
+        </div>
     </div>
 </body>
 <script>
@@ -146,10 +146,11 @@
     document.getElementById("resName").onkeyup = validSave;
     document.getElementById("meetName").onkeyup = validSave;
 
-    const saveButton = document.getElementById("save");
+    const saveButton = document.getElementById('save');
+
     if (saveButton) {
         saveButton.addEventListener('click', event => {
-            fetch(`api/boards`, {
+            fetch(`/api/boards`, {
                 method: 'POST',
                 headers: {
                     "Content-type": "application/json",
@@ -160,8 +161,8 @@
                     minNum : document.getElementById("minNum").value,
                     maxNum : document.getElementById("maxNum").value,
                     meetDate : meetDate,
-                    resaurantName : document.getElementById("resName").value,
-                    resaurantKey : 'sample reskey',
+                    restaurantName : document.getElementById("resName").value,
+                    restaurantKey : 'sample reskey',
                     meetName : document.getElementById("meetName").value,
                     meetKey : 'sample meetkdy'
                 })

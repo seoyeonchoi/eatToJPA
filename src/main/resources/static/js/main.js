@@ -131,7 +131,7 @@ document.getElementById('new-board-form').addEventListener('click', event => {
         }
         return response.text();
     }).then(message => {
-        location.replace('new-board/' + meetDate);
+        location.replace('/new-board/' + meetDate);
     }).catch(error => {
         alert(error.message);
     })

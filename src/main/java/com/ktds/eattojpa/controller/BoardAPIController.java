@@ -26,18 +26,24 @@ public class BoardAPIController {
     private final UserService userService;
 
     @PostMapping("/api/boards")
-    public ResponseEntity<Board> addBoard(@RequestBody BoardRequest request, Authentication auth) {
+    public ResponseEntity<?> addBoard(@RequestBody BoardRequest request, Authentication auth) {
         // 로그인 정보 확인
         if (auth == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+                    .body("auth 없음");
         }
         User loginUser = userService.findByEmail(auth.getName());
         String loginId = loginUser.getId();
+        System.out.println("글생성중: " + loginId + " " + request.getTitle());
         log.info(request.toString());
         Board savedBoard = boardService.save(request, loginId);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(savedBoard);
+        if (savedBoard != null) {
+            System.out.println("만들어졌다. " + savedBoard.getTitle());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(savedBoard);
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("생성 실패");
     }
 
     @GetMapping("/api/boards")

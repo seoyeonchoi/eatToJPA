@@ -45,9 +45,10 @@ public class UserApiController {
 
     @PutMapping("api/user")
     public ResponseEntity<String> changeUserInfo(@RequestBody AddUserRequest request) {
-        if (userService.update(request)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("비밀번호 수정 성공");
+        boolean result = userService.update(request);
+        System.out.println(result);
+        if (result) {
+            return new ResponseEntity<>("비밀번호 수정 성공", HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("비밀번호 수정 실패");

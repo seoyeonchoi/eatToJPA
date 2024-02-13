@@ -74,7 +74,7 @@ public class BoardViewController {
                 .map(BoardResponse::new)
                 .toList();
 
-        if(auth != null) {
+        if (auth != null) {
             System.out.println("auth.getName: " + auth.getName());
             User loginUser = userService.findByEmail(auth.getName());
             if (loginUser != null) {
