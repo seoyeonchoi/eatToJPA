@@ -40,9 +40,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     var tbody = $('#boardsByMeetDate');
                     tbody.empty();
                     $.each(data, function(index, board) {
-                        var row = '<tr>' +
+                        var row = '<tr data-id="' + board.id + '" data-bs-toggle="modal" data-bs-target="#boardModal">' +
                             '<th scope="row">' + board.title + '</th>' +
-                            '<th scope="row">' + (board.completed == 0 ? '모집중' : '마감') + '</th>' +
+                            '<th scope="row">' + (board.completed === 0 ? '모집중' : '마감') + '</th>' +
                             '</tr>';
                         tbody.append(row);
                     });
@@ -58,23 +58,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     calendar.render();
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    var myModal = document.getElementById('myModal')
-    var myInput = document.getElementById('myInput')
-    
-    myModal.addEventListener('shown.bs.modal', function () {
-      myInput.focus()
-    })  
-});
-
 $(document).ready(function() {
     // 각 행을 클릭할 때 모달에 해당 게시물의 세부 정보를 표시
-    $('#boardsByMeetDate tr').click(function() {
+    $(document).on('click', '#boardsByMeetDate tr', function() {
         var boardId = $(this).data('id'); // 각 행의 게시물 ID 가져오기
         console.log(boardId);
         $.ajax({
@@ -100,6 +86,20 @@ $(document).ready(function() {
                 $('#boardDetailModalMeetName').text(data.meetName);
                 $('#boardDetailModalReskey').text(data.restaurantKey);
                 $('#boardDetailModalMeetkey').text(data.meetKey);
+                $('#ModalBoardId').text(data.id);
+
+
+                let userId = document.getElementById('userId').getAttribute('data-userId');
+                console.log('userId: ', userId);
+                if (data.memberId == userId) {
+                    // 유저의 memberId와 view가 가진 userId가 같은 경우
+                    $('#modalBtn1').text('수정하기').show();
+                    $('#modalBtn2').text('삭제하기');
+                } else {
+                    // 다른 경우
+                    $('#modalBtn1').hide();
+                    $('#modalBtn2').text('참석하기');
+                }
 
             },
             error: function(xhr, status, error) {
@@ -136,3 +136,51 @@ document.getElementById('new-board-form').addEventListener('click', event => {
         alert(error.message);
     })
 });
+
+// 모달 속 버튼 클릭 이벤트 - 수정
+document.getElementById('modalBtn1').addEventListener('click', event => {
+    // meetDate 값을 이용하여 Date 객체 초기화
+    console.log('버튼 눌렀다');
+    let togo = document.getElementById('ModalBoardId').innerHTML;
+    let btnContent = document.getElementById('modalBtn1').innerHTML;
+    if (btnContent === '수정하기'){
+        location.replace('/edit-board/' + togo);
+    }
+});
+
+// 모달 속 버튼 클릭 이벤트 - 삭제
+document.getElementById('modalBtn2').addEventListener('click', event => {
+    // meetDate 값을 이용하여 Date 객체 초기화
+    console.log('삭제버튼 눌렀다');
+    let togo = document.getElementById('ModalBoardId').innerHTML;
+    let btnContent = document.getElementById('modalBtn2').innerHTML;
+    if (btnContent === '삭제하기') {
+        if (confirm('정말 삭제하시겠습니까?')){
+            fetch(`/api/boards/${togo}`, {
+                    method: 'DELETE'
+                }
+            ).then(
+                response => {
+                    if (!response.ok) {
+                        throw new Error("삭제 실패했습니다.");
+                    }
+                    return response.text();
+                }).then(msg => {
+                alert("게시글을 삭제했습니다.");
+                location.replace(`/main`);
+            });
+        };
+    }
+});
+
+// 모달 속 버튼 클릭 이벤트 - 참석
+document.getElementById('modalBtn2').addEventListener('click', event => {
+    // meetDate 값을 이용하여 Date 객체 초기화
+    console.log('버튼 눌렀다');
+    let togo = document.getElementById('ModalBoardId').innerHTML;
+    let btnContent = document.getElementById('modalBtn1').innerHTML;
+    if (btnContent === '수정하기'){
+        location.replace('/edit-board/' + togo);
+    }
+});
+

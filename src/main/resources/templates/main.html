@@ -23,6 +23,7 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+          <div id="userId" th:data-userId="${userId}" style="display: none;"></div>
           <div class="collapse navbar-collapse header-nav" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="nav-header">
                 <li class="nav-item">
@@ -35,7 +36,7 @@
                     <a class="nav-link active" th:href="@{/history}">나의 이용현황</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/new-menu}">메뉴 등록</a>
+                    <a class="nav-link active" th:href="@{/new-board}">메뉴 등록</a>
                 </li>
                 <li class="nav-item">
                     <button type="button" class="btn nav-link active" onclick="location.href='/logout'">로그아웃</button>
@@ -110,21 +111,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="container-fluid">
+                <div class="container">
                     <div class="row border-bottom">
                         <div class="col-6" id="boardDetailModalMintoMax"></div>
                         <div class="col-6" id="boardDetailModalCurrent"></div>
                      </div>
                     <div class="row border-bottom">
-                        <div class="col-12" id="boardDetailModalContent"></div>
+                        <div class="col-12" id="boardDetailModalContent" style="height: 20vh; padding-top: 2vh;"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><방문할 식당></div>
+                        <div class="col-6"><모일 장소></div>
                     </div>
                     <div class="row">
                         <div class="col-6" id="boardDetailModalResName"></div>
                         <div class="col-6" id="boardDetailModalMeetName"></div>
                     </div>
                     <div class="row border-bottom">
-                        <div class="col-6" id="boardDetailModalReskey"></div>
-                        <div class="col-6" id="boardDetailModalMeetkey"></div>
+                        <div class="col-6" id="boardDetailModalReskey" style="height: 15vh"></div>
+                        <div class="col-6" id="boardDetailModalMeetkey" style="height: 15vh"></div>
                     </div>
                     <div class="row border-bottom">
                         <div class="col" id="boardDetailModalCommentAmount"></div>
@@ -146,9 +151,11 @@
                     </div>
                 </div>
             </div>
+            <div id="ModalBoardId" style="display: none;"></div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" id="modalBtn1"></button>
+                <button type="button" class="btn btn-info" id="modalBtn2"></button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
         </div>

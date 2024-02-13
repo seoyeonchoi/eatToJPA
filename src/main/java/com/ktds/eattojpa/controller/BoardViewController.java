@@ -80,6 +80,7 @@ public class BoardViewController {
             if (loginUser != null) {
                 System.out.println("userName: " + loginUser.getName());
                 model.addAttribute("userName", loginUser.getName());
+                model.addAttribute("userId", loginUser.getId());
             }
         }
         model.addAttribute("boardsforCalendar", boards); // 블로그 글 리스트 저장
@@ -92,7 +93,7 @@ public class BoardViewController {
 
 
     // 새 메뉴 등록
-    @GetMapping("/new-board/{meetDate}")
+    @GetMapping({"/new-board/{meetDate}", "/new-board"})
     public String newBoard(@PathVariable(required = false) LocalDate meetDate, Authentication auth, Model model) {
         // 0. 유저 확인
         if(auth != null) {
@@ -107,5 +108,22 @@ public class BoardViewController {
         model.addAttribute("meedDate", meetDate);
         // 작성 가능 여부 파악하고 possible 추가하기
         return "createBoardForm";
+    }
+
+    @GetMapping("/edit-board/{boardId}")
+    public String getEditBoardpage(@PathVariable(required = true) String boardId, Authentication auth, Model model) {
+        if(auth != null) {
+            System.out.println("auth.getName: " + auth.getName());
+            User loginUser = userService.findByEmail(auth.getName());
+            if (loginUser != null) {
+                System.out.println("userName: " + loginUser.getName());
+                model.addAttribute("userName", loginUser.getName());
+                model.addAttribute("userEmail", loginUser.getEmail());
+            }
+        }
+        // board 내용 가져오기
+        Board board = boardService.findById(boardId);
+        model.addAttribute("board", board);
+        return "editBoardForm";
     }
 }

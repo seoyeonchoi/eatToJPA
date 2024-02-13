@@ -50,12 +50,16 @@
     <div class="container-fluid align-content-center">
         <div class="container h1" id="menuPageTitle">새 메뉴 등록🍽️</div>
         <div class="container align-content-center justify-content-center" id="menuDiv">
+            <input type="text" id="boardId" style="display: none;" th:value="${board.id}">
+<!--            <div id="meetDate" style="display: none;" th:value="${board.meetDate}"></div>-->
+            <!--                <div id="resKey" style="display: none;" th:value="${board.meetDate}"></div>-->
+            <!--                <div id="meetKey" style="display: none;" th:value="${board.meetDate}"></div>-->
             <div class="row mt-3 ms-5">
                 <div class="col-2">
                     <p>제목: </p>
                 </div>
                 <div class="col">
-                    <input type="text" id="titleInput" placeholder="게시글 제목을 입력해주세요!">
+                    <input type="text" id="titleInput" th:value="${board.title}" placeholder="게시글 제목을 입력해주세요!">
                 </div>
             </div>
             <div class="row ms-5">
@@ -63,7 +67,7 @@
                     <p>내용: </p>
                 </div>
                 <div class="col">
-                    <textarea id="contentBox" placeholder="게시글 내용을 자유롭게 작성해주세요!"></textarea>
+                    <textarea id="contentBox" th:text="${board.content}" placeholder="게시글 내용을 자유롭게 작성해주세요!"></textarea>
                 </div>
             </div>
             <div class="row ms-5">
@@ -71,17 +75,16 @@
                     <p>모임 날짜: </p>
                 </div>
                 <div class="col">
-                    <input type="date" id="meetDate" th:value="${meetDate}">
+                    <input type="date" id="meetDate" th:value="${board.meetDate}">
                 </div>
             </div>
-
             <div class="row ms-5">
                 <div class="col-2">
                     <p>식당: </p>
                 </div>
                 <div class="col">
                     <div class="input-group mb-3 placeSearchGroup">
-                        <input type="text" id="resName" class="form-control placeSearchInput" placeholder="장소 검색">
+                        <input type="text" id="resName" th:value="${board.restaurantName}" class="form-control placeSearchInput" placeholder="장소 검색">
                         <button class="btn btn-outline-secondary placeSearch" type="button">🔍</button>
                     </div>
                 </div>
@@ -92,7 +95,7 @@
                 </div>
                 <div class="col">
                     <div class="input-group mb-3 placeSearchGroup">
-                        <input type="text" id="meetName" class="form-control placeSearchInput" placeholder="장소 검색">
+                        <input type="text" id="meetName" th:value="${board.meetName}" class="form-control placeSearchInput" placeholder="장소 검색">
                         <button class="btn btn-outline-secondary placeSearch" type="button">🔍</button>
                     </div>
                 </div>
@@ -102,14 +105,14 @@
                     <p>최소 인원: </p>
                 </div>
                 <div class="col-3">
-                    <input type="number" id="minNum">
+                    <input type="number" th:value="${board.minNum}" id="minNum">
                 </div>
                 <div class="col-1"></div>
                 <div class="col-2">
                     <p>최대 인원: </p>
                 </div>
                 <div class="col-3">
-                    <input type="number" id="maxNum">
+                    <input type="number" th:value="${board.maxNum}" id="maxNum">
                 </div>
             </div>
 
@@ -119,42 +122,14 @@
     </div>
 </body>
 <script>
-    window.onload = function() {
-        const saveButton = document.getElementById("save");
-        // 저장 버튼 비활성화
-        saveButton.disabled = true;
-    };
-
-    function validSave() {
-        const saveButton = document.getElementById("save");
-        let title = document.getElementById("titleInput").value;
-        let content = document.getElementById("contentBox").value;
-        let minNum = document.getElementById("minNum").value;
-        let maxNum = document.getElementById("maxNum").value;
-        let resaurantName = document.getElementById("resName").value;
-        let meetName = document.getElementById("meetName").value;
-
-
-        if (title.trim() !== "" && content.trim() !== "" && minNum.trim() !== "" && maxNum.trim() !== "" && resaurantName.trim() !== "" && meetName.trim() !== "") {
-            saveButton.disabled = false; // 저장 버튼 활성화
-        } else {
-            saveButton.disabled = true; // 저장 버튼 비활성화
-        }
-    }
-
-    document.getElementById("titleInput").onkeyup = validSave;
-    document.getElementById("contentBox").onkeyup = validSave;
-    document.getElementById("minNum").onkeyup = validSave;
-    document.getElementById("maxNum").onkeyup = validSave;
-    document.getElementById("resName").onkeyup = validSave;
-    document.getElementById("meetName").onkeyup = validSave;
-
     const saveButton = document.getElementById('save');
+    let boardId = document.getElementById('boardId').value;
+    let meetDate = document.getElementById("meetDate").value
 
     if (saveButton) {
         saveButton.addEventListener('click', event => {
-            fetch(`/api/boards`, {
-                method: 'POST',
+            fetch(`/api/boards/${boardId}`, {
+                method: 'PUT',
                 headers: {
                     "Content-type": "application/json",
                 },
@@ -172,11 +147,11 @@
             }).then(response => {
                 console.log('response이다: ' , response);
                 if (!response.ok) {
-                    throw new Error("글 등록에 실패했습니다.");
+                    throw new Error("글 수정에 실패했습니다.");
                 }
                 return response.text();
             }).then(message => {
-                alert("메뉴 등록 성공!");
+                alert("메뉴 수정 성공!");
                 location.replace(`/main/${meetDate}`);
             }).catch(error => {
                 alert("글 등록에 실패했습니다.");
