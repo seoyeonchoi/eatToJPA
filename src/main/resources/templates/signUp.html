@@ -11,25 +11,108 @@
 <body>
     <div class="container-fluid align-content-center">
         <div class="container h1" id="welcome">Welcome!</div>
-        <form class="container" id="signUpdiv" th:action="@{/user}" method="POST">
+        <div class="container" id="signUpdiv" th:action="@{/user}" method="POST">
             <img th:src="@{images/logo.png}" id="logo" alt="">
             <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
             <p>이름</p>
-            <input class="form-control" type="text" name="name">
+            <input class="form-control" type="text" id="name">
             <p>이메일</p>
             <div class="box">
-                <input class="form-control" name="email" type="email inputEmail">
+                <input class="form-control me-5" id="email" name="email" type="email inputEmail">
                 <button class="btn" id="checkbtn">중복확인</button>
             </div>
             <p>비밀번호</p>
-            <input class="form-control" type="password" name="password">
-            <p>비밀번호 확인</p>
-            <div class="box">
-                <input type="password inputEmail">
+            <input class="form-control" type="password" name="password" id="password">
+            <div class="checkPW">
+                <p>비밀번호 확인</p>
                 <p id="checkPassword">일치합니다!</p>
             </div>
-            <button type="submit" class="btn" id="signUpbtn">회원가입</button>
-        </form>
+            <input type="password" class="form-control" id="confirmPassword">
+            <button type="submit" class="btn signUpbtn" id="save">회원가입</button>
+        </div>
     </div>
 </body>
+<script>
+    // 페이지 로딩 시점에 실행되는 함수
+    window.onload = function() {
+        var message = document.getElementById("checkPassword");
+        var saveButton = document.getElementById("save");
+
+        // "일치합니다!" 메시지 숨기기
+        message.style.display = "none";
+
+        // 저장 버튼 비활성화
+        saveButton.disabled = true;
+    };
+
+    const checkBtn = document.getElementById('checkbtn');
+    let emailCheck = false;
+    if (checkBtn) {
+        checkBtn.addEventListener('click', event => {
+
+            fetch(`api/check-email/${document.getElementById('email').value}`, {
+                method: 'GET'
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('이미 가입된 이메일입니다.');
+                }
+                return response.text();
+            }).then(message => {
+                alert(message);
+                emailCheck = true;
+            }).catch(error => {
+                alert(error.message);
+            })
+        })
+    }
+
+    // 비밀번호와 비밀번호 확인 필드의 값이 일치하는지 확인하는 함수
+    function validatePassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        var message = document.getElementById("checkPassword");
+        var saveButton = document.getElementById("save");
+        saveButton.disabled = true;
+
+        // 비밀번호와 비밀번호 확인이 같은지 확인
+        if (password === confirmPassword && password !== '' && confirmPassword !== '' && emailCheck === true) {
+            message.style.display = "block"; // 일치 메시지 표시
+            saveButton.disabled = false; // 저장 버튼 활성화
+        } else {
+            message.style.display = "none"; // 메시지 숨기기
+            saveButton.disabled = true; // 저장 버튼 비활성화
+        }
+    }
+
+    // 비밀번호 확인 필드의 값이 변경될 때마다 validatePassword 함수 호출
+    document.getElementById("confirmPassword").onkeyup = validatePassword;
+
+    const signUpBtn = document.getElementById('save');
+    if (signUpBtn) {
+        signUpBtn.addEventListener('click', event => {
+            fetch(`api/signup`, {
+                method: 'POST',
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value
+                })
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('회원가입에 실패하였습니다.');
+                }
+                return response.text(); // 서버로부터 받은 메시지를 텍스트로 반환
+            }).then(message => {
+                alert("회원가입이 완료되었습니다. 환영합니다!"); // 서버로부터 받은 메시지를 알림으로 표시
+                location.replace('/index'); // 페이지를 새로고침
+            }).catch(error => {
+                alert("회원가입을 다시 진행해주세요."); // 오류 메시지를 알림으로 표시
+            });
+        });
+    }
+
+</script>
 </html>

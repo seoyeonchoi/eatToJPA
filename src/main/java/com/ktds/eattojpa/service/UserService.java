@@ -6,6 +6,9 @@ import com.ktds.eattojpa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,5 +33,26 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("unexpected user"));
+    }
+
+    public boolean update(AddUserRequest dto) {
+        Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
+        User updateUser = userOptional.orElseThrow(() -> new IllegalArgumentException("User not found"));
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        updateUser.setPassword(encoder.encode(dto.getPassword()));
+
+        try {
+            userRepository.save(updateUser);
+            System.out.println("비밀번호 업데이트 성공");
+            return true;
+        } catch (Exception e) {
+            System.out.println("비밀번호 업데이트 실패: " + e.getMessage());
+            // 실패 시 필요한 추가 작업 수행
+            return false;
+        }
+    }
+
+    public boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

@@ -58,4 +58,8 @@ public class BoardService {
     public List<Board> findByDate(LocalDate meetDate) {
         return boardRepository.findByMeetDate(meetDate);
     }
+
+    public boolean existsByEmailAndMeetDate(LocalDate meetDate, String loginId) {
+        return boardRepository.existsByMeetDateAndMemberId(meetDate, loginId);
+    }
 }

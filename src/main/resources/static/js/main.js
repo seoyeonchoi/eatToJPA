@@ -111,7 +111,7 @@ $(document).ready(function() {
 });
 
 // 클릭 이벤트 핸들러
-document.getElementById('new-board-form').addEventListener('click', function() {
+document.getElementById('new-board-form').addEventListener('click', event => {
     // meetDate 값을 이용하여 Date 객체 초기화
     if (date == undefined) {
         date = new Date(meetDate);
@@ -122,6 +122,17 @@ document.getElementById('new-board-form').addEventListener('click', function() {
     // meetDate를 형식에 맞게 조합
     var meetDate = date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
 
-    // meetDate를 포함한 URL로 이동
-    window.location.href = '/new-board/' + meetDate;
+    // 해당 날짜에 유저가 이미 쓴 글이 있는지 확인
+    fetch ( `/api/existsByEmailAndMeetDate/${meetDate}`, {
+        method: 'GET'
+        }).then(response => {
+        if (!response.ok) {
+            throw new Error("이미 작성한 글이 있습니다.\n같은 날에 하나의 메뉴만 등록 가능합니다!");
+        }
+        return response.text();
+    }).then(message => {
+        location.replace('new-board/' + meetDate);
+    }).catch(error => {
+        alert(error.message);
+    })
 });
