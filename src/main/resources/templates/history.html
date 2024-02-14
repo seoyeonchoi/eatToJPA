@@ -140,9 +140,9 @@
 
     <!-- Modal -->
     <div class="modal fade" id="boardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="background-color: aliceblue;">
                     <div class="modal-title me-5" id="exampleModalLabel">
                         <div id="boardDetailModalTitle"></div>
                     </div>
@@ -151,32 +151,46 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
-                        <div class="row border-bottom">
+                        <div class="row border-bottom py-2">
                             <div class="col-6" id="boardDetailModalWriter"></div>
                             <div class="col-6" id="boardDetailModalMeetDate"></div>
                         </div>
-                        <div class="row border-bottom">
+                        <div class="row border-bottom py-2">
                             <div class="col-6" id="boardDetailModalMintoMax"></div>
-                            <div class="col-6" id="boardDetailModalCurrent"></div>
+                            <div class="col-6" style="display: flex">
+                                <div class="me-3" id="boardDetailModalCurrent"></div>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        신청자 목록
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item">Action</a></li>
+                                        <li><a class="dropdown-item">Another action</a></li>
+                                        <li><a class="dropdown-item">Something else here</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row border-bottom">
+                        <div class="row border-bottom py-2">
                             <div class="col-12" id="boardDetailModalContent" style="height: 20vh; padding-top: 2vh;"></div>
                         </div>
-                        <div class="row">
+                        <div class="row py-2">
                             <div class="col-6"><방문할 식당></div>
                             <div class="col-6"><모일 장소></div>
                         </div>
-                        <div class="row">
+                        <div class="row border-bottom py-2">
                             <div class="col-6" id="boardDetailModalResName"></div>
                             <div class="col-6" id="boardDetailModalMeetName"></div>
                         </div>
-                        <div class="row border-bottom">
-                            <div class="col-6" id="boardDetailModalReskey" style="height: 15vh"></div>
-                            <div class="col-6" id="boardDetailModalMeetkey" style="height: 15vh"></div>
-                        </div>
-                        <div class="row border-bottom">
+                        <div class="row py-2">
                             <div class="col" id="boardDetailModalCommentAmount"></div>
                         </div>
+
+                        <div class="input-group mb-3">
+                            <input style="width: 40vw;" type="text" class="" placeholder="댓글을 작성해주세요!" id="replyContent" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="button" id="replySubmit">등록</button>
+                        </div>
+
                         <div class="row">
                             <table class="table">
                                 <tbody>

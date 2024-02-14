@@ -1,5 +1,6 @@
 package com.ktds.eattojpa.service;
 
+import com.ktds.eattojpa.domain.Reply;
 import com.ktds.eattojpa.domain.User;
 import com.ktds.eattojpa.dto.AddUserRequest;
 import com.ktds.eattojpa.repository.UserRepository;
@@ -56,4 +57,5 @@ public class UserService {
     public boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
 }

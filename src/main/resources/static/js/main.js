@@ -55,6 +55,102 @@ document.addEventListener('DOMContentLoaded', async function() {
     calendar.render();
 });
 
+function getReplyCount(boardId) {
+    return fetch(`/api/reply/count/${boardId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // 응답 본문을 텍스트로 읽음
+        })
+        .then(bodyText => {
+            $('#boardDetailModalCommentAmount').text('댓글 ' + bodyText + '개');
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+function getReply(boardId) {
+    return fetch(`/api/reply/${boardId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(replyList => {
+            console.log('replies: ', replyList);
+            const tableBody = document.getElementById('replyTable');
+            while (tableBody.firstChild) {
+                tableBody.removeChild(tableBody.firstChild);
+            }
+
+            // replyList의 각 reply 객체에 대해 반복
+            replyList.forEach(reply => {
+                // 새로운 행(tr)을 생성
+                const row = document.createElement('tr');
+
+                // 대댓글인 경우 들여쓰기 및 답글 표시 추가
+                if (reply.id !== reply.parentId) {
+                    const cell = document.createElement('td');
+                    cell.colSpan = 2;
+                    cell.style.paddingLeft = '20px';
+                    cell.textContent = `ㄴ ${reply.memberName}: ${reply.reply}`;
+                    row.appendChild(cell);
+                } else {
+                    // 첫 번째 셀(td)에 작성자 이름 추가
+                    const writerCell = document.createElement('td');
+                    writerCell.textContent = reply.memberName;
+                    row.appendChild(writerCell);
+
+                    // 두 번째 셀(td)에 댓글 내용 추가
+                    const commentCell = document.createElement('td');
+                    commentCell.textContent = reply.reply;
+                    row.appendChild(commentCell);
+                }
+
+                // 생성한 행을 테이블에 추가
+                tableBody.appendChild(row);
+        });
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+function fetchMembers(boardId) {
+    return fetch(`/api/all-attention/${boardId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
+// 신청자 목록을 동적으로 생성하는 함수
+function populateMembers(boardId) {
+    console.log('populateMembers 실행')
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownMenu.innerHTML = ''; // 신청자 목록 초기화
+
+    fetchMembers(boardId).then(members => {
+        console.log('members: ', members);
+        members.forEach(member => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = member;
+            a.classList.add('dropdown-item');
+            li.appendChild(a);
+            dropdownMenu.appendChild(li);
+            console.log(dropdownMenu);
+        });
+    });
+}
+
 $(document).ready(function() {
     // 각 행을 클릭할 때 모달에 해당 게시물의 세부 정보를 표시
     $(document).on('click', '#boardsByMeetDate tr', function() {
@@ -107,6 +203,11 @@ $(document).ready(function() {
                         $('#modalBtn3').text('참석하기');
                     }
                 }
+
+                populateMembers(boardId);
+                getReplyCount(boardId).then(r => console.log(r))
+                getReply(boardId).then(r => console.log(r));
+
 
             },
             error: function(xhr, status, error) {
@@ -278,3 +379,34 @@ document.getElementById('modalBtn3').addEventListener('click', event => {
 });
 
 
+
+document.getElementById('replySubmit').addEventListener('click', event => {
+    // meetDate 값을 이용하여 Date 객체 초기화
+    console.log('버튼 눌렀다');
+    let boardId = document.getElementById('ModalBoardId').innerHTML;
+    let replyContent = document.getElementById('replyContent').value;
+
+    fetch(`/api/reply/${boardId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            reply: replyContent
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                alert("취소에 실패했습니다.");
+                throw new Error("취소에 실패했습니다.");
+            } else {
+                alert("댓글이 등록되었습니다.")
+            }
+        })
+        .then(() => getReplyCount(boardId))
+        .then(() => getReply(boardId))
+        .then(data => console.log(data))
+        .catch(error => console.error('There was a problem with the fetch operation:', error));
+
+
+});
