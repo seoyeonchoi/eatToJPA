@@ -10,4 +10,5 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, String> {
     List<Board> findByMeetDate(LocalDate meetDate);
     boolean existsByMeetDateAndMemberId(LocalDate meetDate, String loginId);
+    List<Board> findByMemberId(String memberId);
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,13 +49,22 @@ public class BoardAPIController {
 
     @GetMapping("/api/boards")
     public ResponseEntity<List<BoardResponse>> findAllBoards() {
-        List<BoardResponse> boards = boardService.findAll()
-                .stream()
-                .map(BoardResponse::new)
-                .toList();
+        List<Board> boards = boardService.findAll();
+        List<BoardResponse> boardResponseList = new ArrayList<>();
 
-        return ResponseEntity.ok()
-                .body(boards);
+        for (Board board : boards) {
+            User user = userService.findById(board.getMemberId());
+            if (user != null) { // 사용자가 존재할 때에만 처리
+                BoardResponse boardResponse = new BoardResponse(board, user.getName());
+                boardResponseList.add(boardResponse);
+            }
+        }
+
+        if (!boardResponseList.isEmpty()) {
+            return ResponseEntity.ok().body(boardResponseList);
+        } else {
+            return ResponseEntity.noContent().build(); // 콘텐츠 없음 상태 반환
+        }
     }
 
     @GetMapping("/api/boards-CalendarForm")
@@ -70,8 +80,9 @@ public class BoardAPIController {
     //URL 경로에서 값 추출
     public ResponseEntity<BoardResponse> findBoard(@PathVariable String id) {
         Board board = boardService.findById(id);
+        User user = userService.findById(board.getMemberId());
         return ResponseEntity.ok()
-                .body(new BoardResponse(board));
+                .body(new BoardResponse(board, user.getName()));
     }
 
     @DeleteMapping("/api/boards/{id}")
@@ -88,16 +99,32 @@ public class BoardAPIController {
                 .body(updatedBoard);
     }
 
+    @GetMapping("/api/close/{id}")
+    public ResponseEntity<Board> closeBoard(@PathVariable String id) {
+        Board closeBoard = boardService.close(id);
+        return ResponseEntity.ok()
+                .body(closeBoard);
+    }
+
     @GetMapping("/api/boards/{meetDate}")
     //URL 경로에서 값 추출
     public ResponseEntity<List<BoardResponse>> findBoardsbyMeetDate(@PathVariable LocalDate meetDate) {
-        List<BoardResponse> boards = boardService.findByDate(meetDate)
-                .stream()
-                .map(BoardResponse::new)
-                .toList();
+        List<Board> boards = boardService.findByDate(meetDate);
+        List<BoardResponse> boardResponseList = new ArrayList<>();
 
-        return ResponseEntity.ok()
-                .body(boards);
+        for (Board board : boards) {
+            User user = userService.findById(board.getMemberId());
+            if (user != null) { // 사용자가 존재할 때에만 처리
+                BoardResponse boardResponse = new BoardResponse(board, user.getName());
+                boardResponseList.add(boardResponse);
+            }
+        }
+
+        if (!boardResponseList.isEmpty()) {
+            return ResponseEntity.ok().body(boardResponseList);
+        } else {
+            return ResponseEntity.noContent().build(); // 콘텐츠 없음 상태 반환
+        }
     }
 
     @GetMapping("/api/existsByEmailAndMeetDate/{meetDate}")

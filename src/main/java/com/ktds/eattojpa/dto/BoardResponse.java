@@ -24,8 +24,9 @@ public class BoardResponse {
     private final String meetKey;
     private final Integer completed;
     private final Integer currentMember;
+    private final String writer;
 
-    public BoardResponse(Board board) {
+    public BoardResponse(Board board, String writer) {
         this.title = board.getTitle();
         this.id = board.getId();
         this.content = board.getContent();
@@ -41,6 +42,7 @@ public class BoardResponse {
         this.meetKey = board.getMeetKey();
         this.completed = board.getCompleted();
         this.currentMember = board.getCurrentMember();
+        this.writer = writer;
     }
 
 }

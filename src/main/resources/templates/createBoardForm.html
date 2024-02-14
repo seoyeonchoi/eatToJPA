@@ -124,7 +124,7 @@
         // 저장 버튼 비활성화
         saveButton.disabled = true;
     };
-
+    let togo = document.getElementById("meetDate").value;
     function validSave() {
         const saveButton = document.getElementById("save");
         let title = document.getElementById("titleInput").value;
@@ -177,7 +177,7 @@
                 return response.text();
             }).then(message => {
                 alert("메뉴 등록 성공!");
-                location.replace(`/main/${meetDate}`);
+                location.replace(`/main/${togo}`);
             }).catch(error => {
                 alert("글 등록에 실패했습니다.");
             });

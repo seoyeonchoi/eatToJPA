@@ -1,67 +1,45 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//     var calendarEl = document.getElementById('calendar');
-//     var calendar = new FullCalendar.Calendar(calendarEl, {
-//       initialView: 'dayGridMonth'
-//     });
-//     calendar.render();
-//   });
 
-var date = new Date();
+// 게시글에 대한 신청자 목록을 가져오는 함수
+function fetchMembers(boardId) {
+    return fetch(`/api/all-attention/${boardId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
 
-document.addEventListener('DOMContentLoaded', async function() {
-    let response = await fetch('/api/boards-CalendarForm');
-    let boardsforCalendar = await response.json();
-    console.log("boardsforCalendar:", boardsforCalendar);
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        initialDate: meetDate,
-        events: boardsforCalendar,
-        selectable: true,
-        dayMaxEventRows: true,
-        dateClick: function(info) {
-            date = new Date(info.dateStr); // info.dateStr을 JavaScript Date 객체로 변환
-            var month = date.getMonth() + 1; // 월 (0부터 시작하므로 1을 더해줌)
-            var day = date.getDate(); // 일
-            var year = date.getFullYear();
+// 신청자 목록을 동적으로 생성하는 함수
+function populateMembers(boardId) {
+    console.log('populateMembers 실행')
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownMenu.innerHTML = ''; // 신청자 목록 초기화
 
-            // HTML 업데이트
-            var formattedDate = month + '월 ' + day + '일의 메뉴';
-            $('#boardTop .h2').text(formattedDate);
-
-            $.ajax({
-                url: '/api/boards/' + info.dateStr,
-                type: 'get',
-                dataType: 'json',
-                success: function(data) {
-                    var tbody = $('#boardsByMeetDate');
-                    tbody.empty();
-                    $.each(data, function(index, board) {
-                        var row = '<tr data-id="' + board.id + '" data-bs-toggle="modal" data-bs-target="#boardModal">' +
-                            '<th scope="row">' + board.title + '</th>' +
-                            '<th scope="row">' + (board.completed === 0 ? '모집중' : '마감') + '</th>' +
-                            '</tr>';
-                        tbody.append(row);
-                    });
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log('AJAX call failed.');
-                    console.log('Status: ' + textStatus);
-                    console.log('Error: ' + errorThrown);
-                }
-            });
-        }
+    fetchMembers(boardId).then(members => {
+        console.log('members: ', members);
+        members.forEach(member => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = member;
+            a.classList.add('dropdown-item');
+            li.appendChild(a);
+            dropdownMenu.appendChild(li);
+            console.log(dropdownMenu);
+        });
     });
-    calendar.render();
-});
+}
 
 $(document).ready(function() {
     // 각 행을 클릭할 때 모달에 해당 게시물의 세부 정보를 표시
-    $(document).on('click', '#boardsByMeetDate tr', function() {
+    $(document).on('click', 'tr', function() {
         let boardId = $(this).data('id'); // 각 행의 게시물 ID 가져오기
         let userId = document.getElementById('userId').getAttribute('data-userId');
-
         console.log(boardId);
+
         $.ajax({
             type: 'GET',
             url: '/api/board/' + boardId, // 서버에서 게시물 세부 정보 가져오는 엔드포인트
@@ -108,6 +86,8 @@ $(document).ready(function() {
                     }
                 }
 
+                populateMembers(boardId);
+
             },
             error: function(xhr, status, error) {
                 // 오류 처리
@@ -133,35 +113,7 @@ $(document).ready(function() {
                 console.error(xhr.responseText);
             }
         });
-
     });
-});
-
-// 클릭 이벤트 핸들러
-document.getElementById('new-board-form').addEventListener('click', event => {
-    // meetDate 값을 이용하여 Date 객체 초기화
-    if (date == undefined) {
-        date = new Date(meetDate);
-    }
-    var month = date.getMonth() + 1; // 월 (0부터 시작하므로 1을 더해줌)
-    var day = date.getDate(); // 일
-
-    // meetDate를 형식에 맞게 조합
-    var meetDate = date.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-
-    // 해당 날짜에 유저가 이미 쓴 글이 있는지 확인
-    fetch ( `/api/existsByEmailAndMeetDate/${meetDate}`, {
-        method: 'GET'
-        }).then(response => {
-        if (!response.ok) {
-            throw new Error("이미 작성한 글이 있습니다.\n같은 날에 하나의 메뉴만 등록 가능합니다!");
-        }
-        return response.text();
-    }).then(message => {
-        location.replace('/new-board/' + meetDate);
-    }).catch(error => {
-        alert(error.message);
-    })
 });
 
 // 모달 속 버튼 클릭 이벤트 - 수정
@@ -276,5 +228,7 @@ document.getElementById('modalBtn3').addEventListener('click', event => {
         }
     }
 });
+
+
 
 

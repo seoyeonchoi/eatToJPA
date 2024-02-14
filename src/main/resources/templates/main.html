@@ -113,8 +113,24 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="row border-bottom">
+                        <div class="col-6" id="boardDetailModalWriter"></div>
+                        <div class="col-6" id="boardDetailModalMeetDate"></div>
+                    </div>
+                    <div class="row border-bottom">
                         <div class="col-6" id="boardDetailModalMintoMax"></div>
-                        <div class="col-6" id="boardDetailModalCurrent"></div>
+                        <div class="col-6">
+                            <div id="boardDetailModalCurrent"></div>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    신청자 목록
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item">Action</a></li>
+                                    <li><a class="dropdown-item">Another action</a></li>
+                                    <li><a class="dropdown-item">Something else here</a></li>
+                                </ul>
+                            </div>
+                        </div>
                      </div>
                     <div class="row border-bottom">
                         <div class="col-12" id="boardDetailModalContent" style="height: 20vh; padding-top: 2vh;"></div>
@@ -155,6 +171,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="modalBtn1"></button>
                 <button type="button" class="btn btn-info" id="modalBtn2"></button>
+                <button type="button" class="btn btn-success" id="modalBtn3"></button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

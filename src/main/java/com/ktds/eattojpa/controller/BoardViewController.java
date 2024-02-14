@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -70,9 +71,16 @@ public class BoardViewController {
                 .map(BoardResponseForCalendar::new)
                 .toList();
         // meetDate에 저장된 메뉴들 목록 저장
-        List<BoardResponse> boardsByMeetDate = boardService.findByDate(parsedDate).stream()
-                .map(BoardResponse::new)
-                .toList();
+        List<Board> boardsByDate = boardService.findByDate(parsedDate);
+        List<BoardResponse> boardsByMeetDate = new ArrayList<>();
+
+        for (Board board : boardsByDate) {
+            User user = userService.findById(board.getMemberId());
+            if (user != null) { // 사용자가 존재할 때에만 처리
+                BoardResponse boardResponse = new BoardResponse(board, user.getName());
+                boardsByMeetDate.add(boardResponse);
+            }
+        }
 
         if (auth != null) {
             System.out.println("auth.getName: " + auth.getName());

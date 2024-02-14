@@ -1,9 +1,11 @@
 package com.ktds.eattojpa.service;
 
 import com.ktds.eattojpa.domain.Board;
+import com.ktds.eattojpa.domain.User;
 import com.ktds.eattojpa.dto.BoardRequest;
 import com.ktds.eattojpa.dto.BoardResponse;
 import com.ktds.eattojpa.repository.BoardRepository;
+import com.ktds.eattojpa.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,11 +14,13 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     // 게사판 글 추가 메서드
     public Board save(BoardRequest request, String memberId) {
@@ -61,5 +65,17 @@ public class BoardService {
 
     public boolean existsByEmailAndMeetDate(LocalDate meetDate, String loginId) {
         return boardRepository.existsByMeetDateAndMemberId(meetDate, loginId);
+    }
+
+    public Board close(String id) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+        board.setCompleted(1);
+        boardRepository.save(board);
+        return board;
+    }
+
+    public List<Board> findByMemberId(String memberId) {
+        return boardRepository.findByMemberId(memberId);
     }
 }

@@ -1,173 +1,209 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EatTo</title>
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/history.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <title>EatTo:history</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/history.css}">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js}" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <script th:src="@{/js/history.js}" defer></script>
 </head>
 <body>
+    <div id="userId" th:data-userId="${userId}" style="display: none;"></div>
     <!-- 네비게이션 헤더 -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary" id="header">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <img src="../static/images/logo.png" id="logo" alt="" width="250px">
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse header-nav" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="nav-header">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page">김유저님, 안녕하세요!</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">마이페이지</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" id="statusActive">나의 이용현황</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">메뉴 등록</a>
-                </li>  
-                <li class="nav-item">
-                    <a class="nav-link active" href="#"><img src="../static/images/bell-fill.svg" alt="" width="25px"></a>
-                </li>
-            </ul>
-          </div>
+            <a class="navbar-brand" th:href="@{/main}">
+                <img th:src="@{images/logo.png}" th:href="@{/main}" id="logo" alt="" width="250px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse header-nav" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="nav-header">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:text="${userName} + '님, 안녕하세요!'"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/mypage}">마이페이지</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/history}" id="statusActive">나의 이용현황</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/new-board}">메뉴 등록</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn nav-link active" onclick="location.href='/logout'">로그아웃</button>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </nav>    
-    
-    <!-- 본문 -->
+    </nav>
+
+<!-- 본문 -->
     <div class="containter text-center">
         <div class="row justify-content-center mt-5">
-            <div class="col-1" id="joinType">참여</div>
+            <div class="col-1 joinType">참여</div>
         </div>
         <div class="row mx-3 my-5">
-            <div class="col text-primary" id="col1">참여 예정
+            <div class="col text-primary">마감 전
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
+                        <tr th:each = "board : ${attentionBeforeCompleted}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                            <th scope="row" th:text="${board.meetDate}"></th>
+                            <th scope="row" th:text="${board.restaurantName}">
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col text-success" id="col2">참여 완료
+            <div class="col text-success">마감 완료
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
+                        <tr th:each = "board : ${attentionCompleted}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                            <th scope="row" th:text="${board.meetDate}"></th>
+                            <th scope="row" th:text="${board.restaurantName}">
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col text-dark" id="col3">지난 참여
+            <div class="col text-dark">오늘 일정
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
-                        </tr>
+                    <tr th:each = "board : ${attentionToday}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                        <th scope="row" th:text="${board.meetDate}"></th>
+                        <th scope="row" th:text="${board.restaurantName}">
+                    </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col text-secondary" id="col4">참여 취소
+            <div class="col text-secondary">지난 참여
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
+                        <tr th:each = "board : ${attentionClosed}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                            <th scope="row" th:text="${board.meetDate}"></th>
+                            <th scope="row" th:text="${board.restaurantName}">
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="row justify-content-center mt-5">
-            <div class="col-1" id="joinType">모집</div>
+            <div class="col-1 joinType">모집</div>
         </div>
         <div class="row mx-3 my-5">
-            <div class="col text-primary" id="col1">모집 중
+            <div class="col text-primary">모집 중
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
+                        <tr th:each = "board : ${BeforeCompleted}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                            <th scope="row" th:text="${board.meetDate}"></th>
+                            <th scope="row" th:text="${board.restaurantName}">
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col text-success" id="col2">모집 완료
+            <div class="col text-success"> 모집 완료
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
+                        <tr th:each = "board : ${Completed}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                            <th scope="row" th:text="${board.meetDate}"></th>
+                            <th scope="row" th:text="${board.restaurantName}">
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col text-dark" id="col3">지난 모집
+            <div class="col text-dark">오늘 일정
                 <table class="table text-dark">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
-                        </tr>
+                    <tr th:each = "board : ${Today}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                        <th scope="row" th:text="${board.meetDate}"></th>
+                        <th scope="row" th:text="${board.restaurantName}">
+                    </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col text-secondary" id="col4">모집 취소
+            <div class="col text-secondary">지난 모집
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <td>
-                                2/5 월
-                            </td>
-                            <td>
-                                방배동 순대국
-                            </td>
-                        </tr>
+                    <tr th:each = "board : ${Closed}" th:data-id="${board.boardId}" data-bs-toggle="modal" data-bs-target="#boardModal">
+                        <th scope="row" th:text="${board.meetDate}"></th>
+                        <th scope="row" th:text="${board.restaurantName}">
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-     
+    <!-- Modal -->
+    <div class="modal fade" id="boardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title me-5" id="exampleModalLabel">
+                        <div id="boardDetailModalTitle"></div>
+                    </div>
+                    <div id="boardDetailModalStatus"></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row border-bottom">
+                            <div class="col-6" id="boardDetailModalWriter"></div>
+                            <div class="col-6" id="boardDetailModalMeetDate"></div>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="col-6" id="boardDetailModalMintoMax"></div>
+                            <div class="col-6" id="boardDetailModalCurrent"></div>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="col-12" id="boardDetailModalContent" style="height: 20vh; padding-top: 2vh;"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><방문할 식당></div>
+                            <div class="col-6"><모일 장소></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6" id="boardDetailModalResName"></div>
+                            <div class="col-6" id="boardDetailModalMeetName"></div>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="col-6" id="boardDetailModalReskey" style="height: 15vh"></div>
+                            <div class="col-6" id="boardDetailModalMeetkey" style="height: 15vh"></div>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="col" id="boardDetailModalCommentAmount"></div>
+                        </div>
+                        <div class="row">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        writer1
+                                    </td>
+                                    <td>
+                                        comment1
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="ModalBoardId" style="display: none;"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalBtn1"></button>
+                    <button type="button" class="btn btn-info" id="modalBtn2"></button>
+                    <button type="button" class="btn btn-success" id="modalBtn3"></button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -13,14 +15,14 @@ public class Reservation {
     @Id
     @Column(name = "id")
     private String id;
-    @Column(name="memberId", nullable = false)
-    private String memberId;
     @Column(name = "boardId", nullable = false)
     private String boardId;
+    @Column(name="memberId", nullable = false)
+    private String memberId;
 
     @Builder
-    public Reservation(String id, String memberId, String boardId) {
-        this.id = id;
+    public Reservation(String boardId, String memberId) {
+        this.id = UUID.randomUUID().toString();
         this.memberId = memberId;
         this.boardId = boardId;
     }

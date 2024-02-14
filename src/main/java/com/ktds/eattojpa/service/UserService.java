@@ -31,6 +31,7 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
+        System.out.println("findByEmail 중이다" + email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("unexpected user"));
     }
