@@ -7,7 +7,7 @@
 
 body{
     font-family: "BMJUA" !important;
-    background: rgba(85, 221, 169, 0.8) !important;
+    background: rgba(85, 221, 169, 0.5) !important;
 }
 
 #myPage{
@@ -42,7 +42,7 @@ input{
     margin-bottom: 8vh !important;
 }
 
-#inputEmail{
+.inputEmail{
     width: 27vw;
     border-left-width:0;
     border-right-width:0;
@@ -102,4 +102,8 @@ p{
     text-align: center;
     color: rgba(0, 208, 171, 0.8);
     padding-left: 10px;
+}
+
+.checkPW{
+    display: flex;
 }

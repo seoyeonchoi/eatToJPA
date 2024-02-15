@@ -1,13 +1,16 @@
 package com.ktds.eattojpa.controller;
 
 import com.ktds.eattojpa.domain.Board;
+import com.ktds.eattojpa.domain.User;
 import com.ktds.eattojpa.dto.BoardListViewResponse;
 import com.ktds.eattojpa.dto.BoardResponse;
 import com.ktds.eattojpa.dto.BoardResponseForCalendar;
 import com.ktds.eattojpa.dto.BoardViewResponse;
 import com.ktds.eattojpa.service.BoardService;
+import com.ktds.eattojpa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +32,7 @@ import java.util.List;
 @Controller
 public class BoardViewController {
     private final BoardService boardService;
+    private final UserService userService;
 
     // 임시 - 전체 boards 조회
     @GetMapping("/boards")
@@ -53,7 +58,7 @@ public class BoardViewController {
 
     // 1. main 조회
     @GetMapping({"/main/{meetDate}", "/main"})
-    public String getMain(@PathVariable(required = false) String meetDate, Principal principal, Model model) {
+    public String getMain(@PathVariable(required = false) String meetDate, Authentication auth, Model model) {
         System.out.println("현재 로그인 상황: " + SecurityContextHolder.getContext().getAuthentication().toString());
 //        System.out.println("principal: " + principal.getName());
         LocalDate parsedDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
@@ -66,9 +71,26 @@ public class BoardViewController {
                 .map(BoardResponseForCalendar::new)
                 .toList();
         // meetDate에 저장된 메뉴들 목록 저장
-        List<BoardResponse> boardsByMeetDate = boardService.findByDate(parsedDate).stream()
-                .map(BoardResponse::new)
-                .toList();;
+        List<Board> boardsByDate = boardService.findByDate(parsedDate);
+        List<BoardResponse> boardsByMeetDate = new ArrayList<>();
+
+        for (Board board : boardsByDate) {
+            User user = userService.findById(board.getMemberId());
+            if (user != null) { // 사용자가 존재할 때에만 처리
+                BoardResponse boardResponse = new BoardResponse(board, user.getName());
+                boardsByMeetDate.add(boardResponse);
+            }
+        }
+
+        if (auth != null) {
+            System.out.println("auth.getName: " + auth.getName());
+            User loginUser = userService.findByEmail(auth.getName());
+            if (loginUser != null) {
+                System.out.println("userName: " + loginUser.getName());
+                model.addAttribute("userName", loginUser.getName());
+                model.addAttribute("userId", loginUser.getId());
+            }
+        }
         model.addAttribute("boardsforCalendar", boards); // 블로그 글 리스트 저장
         model.addAttribute("boardsByMeetDate", boardsByMeetDate); // meetDate 표시 리스트 저장
         System.out.println(model);
@@ -79,14 +101,37 @@ public class BoardViewController {
 
 
     // 새 메뉴 등록
-    @GetMapping("/new-board/{meedDate}/{memberId}")
-    public String newBoard(@RequestParam(required = true) Timestamp meetDate, Model model) {
-        // 1. 유저가 작성한 적 있는지 확인
-
-        // 2. 작성한 적 없으면 생성
+    @GetMapping({"/new-board/{meetDate}", "/new-board"})
+    public String newBoard(@PathVariable(required = false) LocalDate meetDate, Authentication auth, Model model) {
+        // 0. 유저 확인
+        if(auth != null) {
+            System.out.println("auth.getName: " + auth.getName());
+            User loginUser = userService.findByEmail(auth.getName());
+            if (loginUser != null) {
+                System.out.println("userName: " + loginUser.getName());
+                model.addAttribute("userName", loginUser.getName());
+            }
+        }
+        // 1. 작성 가능 여부 확인
         model.addAttribute("meedDate", meetDate);
-        model.addAttribute("board", new BoardViewResponse());
+        // 작성 가능 여부 파악하고 possible 추가하기
+        return "createBoardForm";
+    }
 
-        return "main";
+    @GetMapping("/edit-board/{boardId}")
+    public String getEditBoardpage(@PathVariable(required = true) String boardId, Authentication auth, Model model) {
+        if(auth != null) {
+            System.out.println("auth.getName: " + auth.getName());
+            User loginUser = userService.findByEmail(auth.getName());
+            if (loginUser != null) {
+                System.out.println("userName: " + loginUser.getName());
+                model.addAttribute("userName", loginUser.getName());
+                model.addAttribute("userEmail", loginUser.getEmail());
+            }
+        }
+        // board 내용 가져오기
+        Board board = boardService.findById(boardId);
+        model.addAttribute("board", board);
+        return "editBoardForm";
     }
 }

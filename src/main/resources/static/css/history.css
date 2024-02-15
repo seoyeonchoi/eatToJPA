@@ -6,7 +6,7 @@
 }
 
 
-#joinType{
+.joinType{
     width: 20vh !important;
 
     background: rgba(85, 221, 169, 0.5);
@@ -32,4 +32,25 @@ table{
     font-style: normal;
     font-weight: 200;
     font-size: 20px;
+}
+
+#boardDetailModalStatus{
+    border-radius: 50px;
+    width: 100px;
+    text-align: center;
+}
+
+.modal{
+    font-family: 'BMJUA';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 25px;
+}
+
+.modal-dialog {
+    max-width: 80%;
+}
+
+.border-bottom {
+    border-bottom-width: 2px;
 }
